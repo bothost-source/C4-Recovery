@@ -2,6 +2,7 @@ const { getLocale, isOwner, setState, clearState } = require('../utils/helpers')
 const { quote, formatCount } = require('../utils/formatters');
 const { ownerKeyboard, backKeyboard } = require('../utils/keyboards');
 const db = require('../database/db');
+const config = require('../config');
 
 async function handleOwnerPanel(ctx) {
     const userId = ctx.from.id;
@@ -26,13 +27,17 @@ async function handleStats(ctx) {
     const user = await db.getUser(userId);
     const locale = getLocale(user?.language || 'en');
     const stats = await db.getStats();
+    const quota = await db.getQuota();
 
     const text = quote(
         locale.STATS_TITLE + '\n\n' +
         locale.STATS_USERS.replace('{count}', formatCount(stats.total_users)) + '\n' +
         locale.STATS_CHECKS.replace('{count}', formatCount(stats.total_checks)) + '\n' +
         locale.STATS_BANNED.replace('{count}', formatCount(stats.banned_checks)) + '\n' +
-        locale.STATS_PREMIUM.replace('{count}', formatCount(stats.premium_users))
+        locale.STATS_PREMIUM.replace('{count}', formatCount(stats.premium_users)) + '\n\n' +
+        locale.QUOTA_TITLE + '\n' +
+        locale.QUOTA_DAILY.replace('{used}', quota.daily).replace('{limit}', quota.dailyLimit) + '\n' +
+        locale.QUOTA_MONTHLY.replace('{used}', quota.monthly).replace('{limit}', quota.monthlyLimit)
     );
 
     await ctx.editMessageText(text, {
