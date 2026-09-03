@@ -1,7 +1,13 @@
+const axios = require('axios');
 const db = require('../database/db');
 const config = require('../config');
 
+/**
+ * Probe WhatsApp number for ban status
+ * Tries real API first, falls back to simulation
+ */
 async function probeWhatsApp(userId, number, lang) {
+    // 1. Check cache first (STICKY behavior)
     const cached = await db.getBanCheck('whatsapp', number);
 
     if (cached) {
@@ -20,8 +26,20 @@ async function probeWhatsApp(userId, number, lang) {
         }
     }
 
-    const result = await performProbe(number);
+    // 2. Try real API first
+    let apiResult = null;
+    if (config.WHATSAPP_API_URL && config.WHATSAPP_API_KEY && !config.SIMULATION_MODE) {
+        try {
+            apiResult = await callWhatsAppAPI(number);
+        } catch (err) {
+            console.error('API failed, falling back to simulation:', err.message);
+        }
+    }
 
+    // 3. Use API result or simulate
+    const result = apiResult || await performProbe(number);
+
+    // 4. Store and return
     if (result.status === 'banned') {
         let reasonId = result.reasonId;
         let reasonText = result.reason;
@@ -53,8 +71,8 @@ async function probeWhatsApp(userId, number, lang) {
             perma: result.perma,
             modban: result.modban,
             banDate: result.banDate,
-            reviewRequested: false,
-            reviewDate: null,
+            reviewRequested: result.reviewRequested || false,
+            reviewDate: result.reviewDate || null,
             cached: false
         };
     } else if (result.status === 'unbanned') {
@@ -84,11 +102,68 @@ async function probeWhatsApp(userId, number, lang) {
     }
 }
 
-async function performProbe(number) {
-    if (!config.SIMULATION_MODE) {
-        throw new Error('Real probe not implemented. Set SIMULATION_MODE to true in config.js');
+/**
+ * Call the real WhatsApp ban check API
+ * Adjust endpoint/method based on actual API spec
+ */
+async function callWhatsAppAPI(number) {
+    const url = config.WHATSAPP_API_URL;
+    const headers = {
+        'Authorization': `Bearer ${config.WHATSAPP_API_KEY}`,
+        'Content-Type': 'application/json'
+    };
+
+    if (config.WHATSAPP_API_SECRET) {
+        headers['X-API-Secret'] = config.WHATSAPP_API_SECRET;
     }
 
+    // Try POST first (most common for ban check APIs)
+    let response;
+    try {
+        response = await axios.post(url, {
+            phone: number,
+            action: 'check_ban'
+        }, { headers, timeout: 15000 });
+    } catch (postErr) {
+        // Fallback to GET with query params
+        response = await axios.get(url, {
+            params: { phone: number, key: config.WHATSAPP_API_KEY },
+            headers,
+            timeout: 15000
+        });
+    }
+
+    const data = response.data;
+
+    // Parse API response - adjust field names based on actual API response format
+    // Expected format from your screenshots:
+    // { status: 'banned'|'unbanned'|'not_found', reason: '...', perma: true|false, 
+    //   modban: true|false, banned_at: '...', review_requested: true|false, review_date: '...' }
+
+    if (data.status === 'unbanned' || data.status === 'active') {
+        return { status: 'unbanned' };
+    }
+
+    if (data.status === 'not_found' || data.status === 'invalid') {
+        return { status: 'not_found' };
+    }
+
+    // Banned
+    return {
+        status: 'banned',
+        reason: data.reason || data.ban_reason || 'Unknown',
+        perma: data.perma === true || data.perma === 'yes' || data.permanent === true,
+        modban: data.modban === true || data.modban === 'true',
+        banDate: data.banned_at || data.ban_date || data.date || new Date().toISOString(),
+        reviewRequested: data.review_requested === true || data.review === true,
+        reviewDate: data.review_date || null
+    };
+}
+
+/**
+ * Simulation fallback
+ */
+async function performProbe(number) {
     const hash = hashCode(number);
     const isBanned = (hash % 100) < (config.SIMULATION.BAN_CHANCE * 100);
 
@@ -111,7 +186,9 @@ async function performProbe(number) {
         status: 'banned',
         perma: isPerma,
         modban: isModban,
-        banDate: banDate.toISOString()
+        banDate: banDate.toISOString(),
+        reviewRequested: false,
+        reviewDate: null
     };
 }
 
