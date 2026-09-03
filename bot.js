@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+const http = require('http');
 const { Telegraf } = require('telegraf');
 const config = require('./config');
 const db = require('./database/db');
@@ -11,6 +14,29 @@ const { handleInstagramMenu, handleInstagramUsername } = require('./handlers/ins
 const { handlePremiumMenu } = require('./handlers/premium');
 const { handleOwnerPanel, handleStats, handleGrantStart, handleGrantId, handleRevokeStart, handleRevokeId, handleMaintenance, handleBroadcastStart, handleBroadcastMessage } = require('./handlers/owner');
 
+// ===== HEALTH CHECK SERVER (keeps Render free tier alive) =====
+const PORT = process.env.PORT || 3000;
+
+const healthServer = http.createServer((req, res) => {
+    if (req.url === '/health' || req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            status: 'ok',
+            bot: 'C4 Recovery',
+            uptime: process.uptime(),
+            timestamp: new Date().toISOString()
+        }));
+    } else {
+        res.writeHead(404);
+        res.end(JSON.stringify({ error: 'Not found' }));
+    }
+});
+
+healthServer.listen(PORT, () => {
+    console.log(`Health check server running on port ${PORT}`);
+});
+
+// ===== TELEGRAM BOT =====
 const bot = new Telegraf(config.BOT_TOKEN);
 
 bot.use(async (ctx, next) => {
@@ -94,5 +120,11 @@ bot.launch()
     .then(() => console.log('C4 Recovery Bot started'))
     .catch(err => console.error('Failed to start:', err));
 
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+process.once('SIGINT', () => {
+    bot.stop('SIGINT');
+    healthServer.close();
+});
+process.once('SIGTERM', () => {
+    bot.stop('SIGTERM');
+    healthServer.close();
+});
