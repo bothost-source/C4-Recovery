@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
 const config = require('../config');
 
 class Database {
@@ -57,6 +56,15 @@ class Database {
             this.db.run(`CREATE TABLE IF NOT EXISTS settings (
                 key TEXT PRIMARY KEY,
                 value TEXT
+            )`);
+
+            // API Quota tracking
+            this.db.run(`CREATE TABLE IF NOT EXISTS api_quota (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL,
+                month TEXT NOT NULL,
+                count INTEGER DEFAULT 0,
+                UNIQUE(date)
             )`);
 
             this.seedReasons();
@@ -217,6 +225,56 @@ class Database {
                 (err) => {
                     if (err) reject(err);
                     else resolve();
+                }
+            );
+        });
+    }
+
+    // API Quota methods
+    incrementQuota() {
+        return new Promise((resolve, reject) => {
+            const today = new Date().toISOString().split('T')[0];
+            const month = today.substring(0, 7); // YYYY-MM
+
+            this.db.run(
+                `INSERT INTO api_quota (date, month, count) VALUES (?, ?, 1)
+                 ON CONFLICT(date) DO UPDATE SET count = count + 1`,
+                [today, month],
+                (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                }
+            );
+        });
+    }
+
+    getQuota() {
+        return new Promise((resolve, reject) => {
+            const today = new Date().toISOString().split('T')[0];
+            const month = today.substring(0, 7);
+
+            this.db.get(
+                "SELECT count FROM api_quota WHERE date = ?",
+                [today],
+                (err, dailyRow) => {
+                    if (err) reject(err);
+                    else {
+                        this.db.get(
+                            "SELECT SUM(count) as monthly_count FROM api_quota WHERE month = ?",
+                            [month],
+                            (err, monthlyRow) => {
+                                if (err) reject(err);
+                                else {
+                                    resolve({
+                                        daily: dailyRow ? dailyRow.count : 0,
+                                        monthly: monthlyRow ? monthlyRow.monthly_count : 0,
+                                        dailyLimit: config.API_QUOTA_DAILY,
+                                        monthlyLimit: config.API_QUOTA_MONTHLY
+                                    });
+                                }
+                            }
+                        );
+                    }
                 }
             );
         });
