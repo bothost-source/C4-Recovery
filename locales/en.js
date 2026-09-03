@@ -25,7 +25,7 @@ module.exports = {
     PREMIUM_ACTIVE: " You have premium access!",
 
     WA_TITLE: "📱 WhatsApp Ban Checker",
-    WA_ENTER_NUMBER: "Send the number to check.\n\nFormat examples:\n+1234567890\n2349135204957\n\nOr use shortcut: ? +1234567890",
+    WA_ENTER_NUMBER: "Send the number to check.\n\nFormat examples:\n+1234567890\n1234567890\n\nOr use shortcut: ? +1234567890",
     WA_CHECKING: " Checking number...",
     WA_RESULT_UNBANNED: "☎️: {number}\nStatus: unbanned\nModban: false",
     WA_RESULT_BANNED: "☎️: {number}\nStatus: banned\nReason: {reason}\nPerma: {perma}\nBanned at: {date}",
