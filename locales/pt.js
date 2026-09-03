@@ -25,7 +25,7 @@ module.exports = {
     PREMIUM_ACTIVE: "Voce tem acesso premium!",
 
     WA_TITLE: "📱 Verificador de Banimento WhatsApp",
-    WA_ENTER_NUMBER: "Envie o numero para verificar.\nFormato: `? +1234567890` ou apenas o numero.",
+    WA_ENTER_NUMBER: "Envie o numero para verificar.\n\nExemplos de formato:\n+1234567890\n2349135204957\n\nOu use atalho: ? +1234567890",
     WA_CHECKING: " Verificando numero...",
     WA_RESULT_UNBANNED: "☎️: {number}\nStatus: desbanido\nModban: false",
     WA_RESULT_BANNED: "☎️: {number}\nStatus:  banido\nMotivo: {reason}\nPerma: {perma}\nBanido em: {date}",
