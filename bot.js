@@ -14,7 +14,11 @@ const { handleInstagramMenu, handleInstagramUsername } = require('./handlers/ins
 const { handlePremiumMenu } = require('./handlers/premium');
 const { handleOwnerPanel, handleStats, handleGrantStart, handleGrantId, handleRevokeStart, handleRevokeId, handleMaintenance, handleBroadcastStart, handleBroadcastMessage } = require('./handlers/owner');
 
-// ===== HEALTH CHECK SERVER (keeps Render free tier alive) =====
+console.log('[BOT] Starting C4 Recovery Bot...');
+console.log('[BOT] Node version:', process.version);
+console.log('[BOT] Config loaded:', !!config.BOT_TOKEN);
+
+// ===== HEALTH CHECK SERVER =====
 const PORT = process.env.PORT || 3000;
 
 const healthServer = http.createServer((req, res) => {
@@ -33,7 +37,7 @@ const healthServer = http.createServer((req, res) => {
 });
 
 healthServer.listen(PORT, () => {
-    console.log(`Health check server running on port ${PORT}`);
+    console.log(`[BOT] Health check server running on port ${PORT}`);
 });
 
 // ===== TELEGRAM BOT =====
@@ -78,10 +82,13 @@ bot.action(/review_instagram_(.+)/, (ctx) => {
 });
 
 bot.on('text', async (ctx) => {
+    console.log(`[BOT] Received text from ${ctx.from.id}: "${ctx.message.text.substring(0, 50)}"`);
+
     const userId = ctx.from.id;
     const state = getState(userId);
 
     if (state) {
+        console.log(`[BOT] User state: ${state.state}`);
         switch (state.state) {
             case 'waiting_number':
                 return handleWhatsAppNumber(ctx);
@@ -99,6 +106,7 @@ bot.on('text', async (ctx) => {
     }
 
     if (ctx.message.text.startsWith('?')) {
+        console.log(`[BOT] Detected ? shortcut`);
         const premium = await db.isPremium(userId);
         if (!premium) {
             const locale = require('./locales/en');
@@ -112,13 +120,14 @@ bot.on('text', async (ctx) => {
 });
 
 bot.catch((err, ctx) => {
-    console.error('Bot error:', err);
+    console.error('[BOT] UNCAUGHT ERROR:', err.message);
+    console.error('[BOT] Stack:', err.stack);
     ctx.reply('An error occurred. Please try /start').catch(() => {});
 });
 
 bot.launch()
-    .then(() => console.log('C4 Recovery Bot started'))
-    .catch(err => console.error('Failed to start:', err));
+    .then(() => console.log('[BOT] C4 Recovery Bot started successfully'))
+    .catch(err => console.error('[BOT] Failed to start:', err));
 
 process.once('SIGINT', () => {
     bot.stop('SIGINT');
