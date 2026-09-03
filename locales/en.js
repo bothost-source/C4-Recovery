@@ -1,0 +1,90 @@
+module.exports = {
+    WELCOME_TITLE: " C4 Recovery",
+    WELCOME_DESC: "Welcome to C4 Recovery Bot.\nCheck WhatsApp & Instagram ban status instantly.",
+    WELCOME_FOOTER: "Select your language to continue ↓",
+
+    SELECT_LANGUAGE: "Select Language",
+    LANG_EN: "🇺🇸 English",
+    LANG_PT: "🇧🇷 Brazil",
+    LANG_CHANGED: " Language changed to English",
+
+    MENU_TITLE: " Main Menu",
+    MENU_DESC: "Choose an option below:",
+    BTN_WHATSAPP: " WhatsApp Checker",
+    BTN_INSTAGRAM: "Instagram Checker",
+    BTN_BUY_PREMIUM: "Buy Premium",
+    BTN_CHANGE_LANG: " Change Language",
+    BTN_OWNER_PANEL: " Owner Panel",
+
+    PREMIUM_TITLE: " Premium Access",
+    PREMIUM_DESC: "Unlock ban checking features by purchasing premium access.",
+    PREMIUM_PRICE: "Price: {price}",
+    PREMIUM_CONTACT: "Contact {owner} to purchase premium access.",
+    PREMIUM_REQUIRED: " Premium Required",
+    PREMIUM_REQUIRED_DESC: "You need premium access to use this feature.\n\nContact {owner} to purchase.",
+    PREMIUM_ACTIVE: " You have premium access!",
+
+    WA_TITLE: "📱 WhatsApp Ban Checker",
+    WA_ENTER_NUMBER: "Send the number to check.\nFormat: `? +1234567890` or just the number.",
+    WA_CHECKING: " Checking number...",
+    WA_RESULT_UNBANNED: "☎️: {number}\nStatus: unbanned\nModban: false",
+    WA_RESULT_BANNED: "☎️: {number}\nStatus: banned\nReason: {reason}\nPerma: {perma}\nBanned at: {date}",
+    WA_RESULT_BANNED_REVIEW: "☎️: {number}\nStatus: banned\nReason: {reason}\nPerma: {perma}\nBanned at: {date}\nReview req at: {review_date}",
+    WA_RESULT_NOT_FOUND: "☎️: {number}\nStatus: Not registered on WhatsApp",
+    WA_BTN_REQUEST_REVIEW: "Request Review",
+    WA_REVIEW_REQUESTED: " Review requested successfully!",
+    WA_REVIEW_ALREADY: " Review already requested on {date}",
+
+    IG_TITLE: "Instagram Ban Checker",
+    IG_ENTER_USERNAME: "Send the Instagram username to check.",
+    IG_CHECKING: "🔍 Checking username...",
+    IG_RESULT_UNBANNED: "👤: {username}\nStatus: unbanned\n\n{profile}",
+    IG_RESULT_BANNED: "👤: {username}\nStatus: banned\nReason: {reason}\nPerma: {perma}",
+    IG_RESULT_NOT_FOUND: "👤: {username}\nStatus: Account not found",
+    IG_PROFILE: " Profile:\nName: {name}\nBio: {bio}\nFollowers: {followers}\nFollowing: {following}\nPosts: {posts}",
+
+    OWNER_TITLE: " Owner Panel",
+    OWNER_DESC: "Manage your bot:",
+    BTN_STATS:  "Statistics",
+    BTN_GRANT: "Grant Premium",
+    BTN_REVOKE: "Revoke Premium",
+    BTN_MAINTENANCE: "Maintenance Mode",
+    BTN_BROADCAST: "Broadcast",
+    BTN_BACK: " Back",
+
+    STATS_TITLE: "Bot Statistics",
+    STATS_USERS: "Total Users: {count}",
+    STATS_CHECKS: " Total Checks: {count}",
+    STATS_BANNED: " Banned Found: {count}",
+    STATS_PREMIUM: "Premium Users: {count}",
+
+    GRANT_ENTER: "Send the user ID to grant premium access:",
+    REVOKE_ENTER: "Send the user ID to revoke premium access:",
+    GRANT_SUCCESS: " Premium granted to user {userId}",
+    REVOKE_SUCCESS: " Premium revoked from user {userId}",
+    USER_NOT_FOUND: "User not found",
+
+    MAINTENANCE_ON: "🔧 Maintenance mode: ON\n\nBot is now under maintenance.",
+    MAINTENANCE_OFF: "🔧 Maintenance mode: OFF\n\nBot is now active.",
+    MAINTENANCE_MSG: "🛠️ Bot is under maintenance. Please try again later.",
+
+    BROADCAST_ENTER: "Send the message to broadcast to all users:",
+    BROADCAST_SENT: "Broadcast sent to {count} users",
+    BROADCAST_FAIL: " Failed to send to {count} users",
+
+    ERROR_GENERIC: "An error occurred. Please try again.",
+    ERROR_INVALID_NUMBER: "Invalid number format. Use: `? +1234567890`",
+    ERROR_INVALID_USERNAME: " Invalid username. Please send a valid Instagram username.",
+    ERROR_MAINTENANCE: "Bot is under maintenance. Please try again later.",
+
+    MASKED_NUMBER: "{prefix}********",
+
+    YES: "yes",
+    NO: "no",
+
+    PERMA_YES: "yes",
+    PERMA_NO: "no",
+
+    MODBAN_TRUE: "true",
+    MODBAN_FALSE: "false",
+};
