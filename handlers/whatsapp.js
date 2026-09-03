@@ -1,4 +1,4 @@
-const { getLocale, setState, clearState, validateNumber, formatNumberDisplay } = require('../utils/helpers');
+const { getLocale, setState, clearState, validateNumber, formatNumberDisplay, isOwner } = require('../utils/helpers');
 const { quote, formatDate } = require('../utils/formatters');
 const { backKeyboard, reviewKeyboard } = require('../utils/keyboards');
 const { probeWhatsApp } = require('../services/whatsappProbe');
@@ -11,7 +11,8 @@ async function handleWhatsAppMenu(ctx) {
         const locale = getLocale(user?.language || 'en');
         const premium = await db.isPremium(userId);
 
-        if (!premium) {
+        // Owner bypasses premium check
+        if (!premium && !isOwner(userId)) {
             return ctx.editMessageText(
                 quote(locale.PREMIUM_REQUIRED + '\n\n' + locale.PREMIUM_REQUIRED_DESC.replace('{owner}', require('../config').OWNER_USERNAME)),
                 {
@@ -51,7 +52,7 @@ async function handleWhatsAppNumber(ctx) {
         const user = await db.getUser(userId);
         const locale = getLocale(user?.language || 'en');
 
-        // Remove ? prefix if present (shortcut support)
+        // Remove ? prefix if present
         if (text.startsWith('?')) {
             text = text.substring(1).trim();
         }
