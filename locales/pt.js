@@ -1,0 +1,90 @@
+module.exports = {
+    WELCOME_TITLE: " C4 Recovery",
+    WELCOME_DESC: "Bem-vindo ao C4 Recovery Bot.\nVerifique o status de banimento do WhatsApp e Instagram instantaneamente.",
+    WELCOME_FOOTER: "Selecione seu idioma para continuar ↓",
+
+    SELECT_LANGUAGE: " Selecionar Idioma",
+    LANG_EN: " English",
+    LANG_PT: " Brazil",
+    LANG_CHANGED: " Idioma alterado para Portugues",
+
+    MENU_TITLE: " Menu Principal",
+    MENU_DESC: "Escolha uma opcao abaixo:",
+    BTN_WHATSAPP: "Verificador WhatsApp",
+    BTN_INSTAGRAM: " Verificador Instagram",
+    BTN_BUY_PREMIUM: " Comprar Premium",
+    BTN_CHANGE_LANG: " Alterar Idioma",
+    BTN_OWNER_PANEL: "Painel do Dono",
+
+    PREMIUM_TITLE: " Acesso Premium",
+    PREMIUM_DESC: "Desbloqueie os recursos de verificacao de banimento comprando acesso premium.",
+    PREMIUM_PRICE: "Preco: {price}",
+    PREMIUM_CONTACT: "Entre em contato com {owner} para comprar acesso premium.",
+    PREMIUM_REQUIRED: " Premium Necessario",
+    PREMIUM_REQUIRED_DESC: "Voce precisa de acesso premium para usar este recurso.\n\nEntre em contato com {owner} para comprar.",
+    PREMIUM_ACTIVE: "Voce tem acesso premium!",
+
+    WA_TITLE: "📱 Verificador de Banimento WhatsApp",
+    WA_ENTER_NUMBER: "Envie o numero para verificar.\nFormato: `? +1234567890` ou apenas o numero.",
+    WA_CHECKING: " Verificando numero...",
+    WA_RESULT_UNBANNED: "☎️: {number}\nStatus: desbanido\nModban: false",
+    WA_RESULT_BANNED: "☎️: {number}\nStatus:  banido\nMotivo: {reason}\nPerma: {perma}\nBanido em: {date}",
+    WA_RESULT_BANNED_REVIEW: "☎️: {number}\nStatus:  banido\nMotivo: {reason}\nPerma: {perma}\nBanido em: {date}\nRevisao solicitada em: {review_date}",
+    WA_RESULT_NOT_FOUND: "☎️: {number}\nStatus:  Nao registrado no WhatsApp",
+    WA_BTN_REQUEST_REVIEW: " Solicitar Revisao",
+    WA_REVIEW_REQUESTED: "Revisao solicitada com sucesso!",
+    WA_REVIEW_ALREADY: "Revisao ja solicitada em {date}",
+
+    IG_TITLE: " Verificador de Banimento Instagram",
+    IG_ENTER_USERNAME: "Envie o nome de usuario do Instagram para verificar.",
+    IG_CHECKING: "🔍 Verificando usuario...",
+    IG_RESULT_UNBANNED: "👤: {username}\nStatus:  desbanido\n\n{profile}",
+    IG_RESULT_BANNED: "👤: {username}\nStatus:  banido\nMotivo: {reason}\nPerma: {perma}",
+    IG_RESULT_NOT_FOUND: "👤: {username}\nStatus:  Conta nao encontrada",
+    IG_PROFILE: " Perfil:\nNome: {name}\nBio: {bio}\nSeguidores: {followers}\nSeguindo: {following}\nPosts: {posts}",
+
+    OWNER_TITLE: " Painel do Dono",
+    OWNER_DESC: "Gerencie seu bot:",
+    BTN_STATS: " Estatisticas",
+    BTN_GRANT: " Conceder Premium",
+    BTN_REVOKE: "Revogar Premium",
+    BTN_MAINTENANCE: " Modo Manutencao",
+    BTN_BROADCAST: " Transmissao",
+    BTN_BACK: "Voltar",
+
+    STATS_TITLE: " Estatisticas do Bot",
+    STATS_USERS: " Total de Usuarios: {count}",
+    STATS_CHECKS: " Total de Verificacoes: {count}",
+    STATS_BANNED: " Bans Encontrados: {count}",
+    STATS_PREMIUM: " Usuarios Premium: {count}",
+
+    GRANT_ENTER: "Envie o ID do usuario para conceder acesso premium:",
+    REVOKE_ENTER: "Envie o ID do usuario para revogar acesso premium:",
+    GRANT_SUCCESS: " Premium concedido ao usuario {userId}",
+    REVOKE_SUCCESS: " Premium revogado do usuario {userId}",
+    USER_NOT_FOUND: " Usuario nao encontrado",
+
+    MAINTENANCE_ON: " Modo manutencao: ATIVADO\n\nBot esta em manutencao.",
+    MAINTENANCE_OFF: " Modo manutencao: DESATIVADO\n\nBot esta ativo.",
+    MAINTENANCE_MSG: " Bot esta em manutencao. Tente novamente mais tarde.",
+
+    BROADCAST_ENTER: "Envie a mensagem para transmitir a todos os usuarios:",
+    BROADCAST_SENT: " Transmissao enviada para {count} usuarios",
+    BROADCAST_FAIL: " Falha ao enviar para {count} usuarios",
+
+    ERROR_GENERIC: " Ocorreu um erro. Tente novamente.",
+    ERROR_INVALID_NUMBER: " Formato de numero invalido. Use: `? +1234567890`",
+    ERROR_INVALID_USERNAME: " Nome de usuario invalido. Envie um nome de usuario do Instagram valido.",
+    ERROR_MAINTENANCE: "Bot esta em manutencao. Tente novamente mais tarde.",
+
+    MASKED_NUMBER: "{prefix}********",
+
+    YES: "sim",
+    NO: "nao",
+
+    PERMA_YES: "sim",
+    PERMA_NO: "nao",
+
+    MODBAN_TRUE: "true",
+    MODBAN_FALSE: "false",
+};
